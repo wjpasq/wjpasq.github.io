@@ -119,21 +119,25 @@ h6 {
 }
 
 .fun-left-pic {
-    border-radius: 50px;
+    border-radius: 25%;
     margin-right: 50px;
     max-height: 160px;
     margin-bottom: auto;
     margin-top: auto;
     padding: 10px;
+    width: 30%;
+    aspect-ratio: 1;
 }
 
 .fun-right-pic {
-    border-radius: 50px;
+    border-radius: 25%;
     margin-left: 50px;
     max-height: 160px;
     margin-bottom: auto;
     margin-top: auto;
     padding: 10px;
+    width: 30%;
+    aspect-ratio: 1;
 }
 
 .cb-eye-img {

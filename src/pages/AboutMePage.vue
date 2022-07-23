@@ -86,19 +86,23 @@ h6 {
 }
 
 .about-left-pic {
-    border-radius: 50px;
+    border-radius: 25%;
     margin-right: 50px;
     max-height: 160px;
     margin-bottom: auto;
     margin-top: auto;
+    width: 30%;
+    aspect-ratio: 1;
 }
 
 .about-right-pic {
-    border-radius: 50px;
+    border-radius: 25%;
     margin-left: 50px;
     max-height: 160px;
     margin-bottom: auto;
     margin-top: auto;
+    width: 30%;
+    aspect-ratio: 1;
 }
 
 .apple-pic {
