@@ -116,17 +116,22 @@ export default defineComponent({
         };
         const toggleVerticalMenu = function (event: Event) {
             const target = event.target as HTMLElement;
-            console.log("Toggle vertical");
+            const container = document.getElementById("navButton") as HTMLElement;
+            
             if (showVerticalNav.value) {
+                console.log("closing navber");
                 showVerticalNav.value = false;
                 togglerActive.value = false;
+                window.removeEventListener("click", togglerActiveListener);
+                window.removeEventListener("touchstart", togglerActiveListener);
             } else {
-                showVerticalNav.value = (document.activeElement?.id === "navButton");
+                showVerticalNav.value = (container.contains(target));
                 togglerActive.value = true;
                 window.addEventListener("click", togglerActiveListener);
                 window.addEventListener("touchstart", togglerActiveListener);
             }
         };
+
         return {
             containerClasses,
             menuButton,
