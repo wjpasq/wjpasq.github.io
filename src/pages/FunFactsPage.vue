@@ -1,17 +1,17 @@
 <template>
     <div class="fun-facts-wrapper">
         <div class="fun-card-wrapper" style="background-color: #1F4287;">
-            <img class="fun-left-pic" style="background-color: #FFFFFF" src="../assets/colorblind-test.png" alt="colorblind-test">
+            <ColorblindSwitch class="switch" @switchClicked="(switchValue) => $emit('toggleFilter', switchValue)"></ColorblindSwitch>
             <span>
+                <img class="fun-left-pic" id="colorblind-pic" style="background-color: #FFFFFF" src="../assets/colorblind-test.png" alt="colorblind-test"/>
                 <h6>I'm Color Blind</h6>
                 When I was in second grade, I colored the sky purple and the grass brown. Afterwards,
                 I was taken to the optometrist and found out I had Dueteranomaly color deficiency, or
                 red-green color blindness. I rarely notice my color blindness in day-to-day life (except 
                 when I'm asked to read a color-coded map). If you want to see what the world looks 
                 like to me, flip the switch to <img class="cb-eye-img" src="../assets/cb_eye.svg"> 
-                in the top right corner.
+                above the color blind test.
             </span>
-            <ColorblindSwitch @switchClicked="(switchValue) => $emit('toggleFilter', switchValue)"></ColorblindSwitch>
         </div>
         <div class="fun-card-wrapper" style="background-color: #278EA5;">
             <span style="width: 100%;">
@@ -24,6 +24,7 @@
         </div>
         <div class="fun-card-wrapper" style="background-color: #1F4287;">
             <span>
+                <img class="fun-right-pic" style="background-color: #21E6C1;" src="../assets/Drums.svg"/>
                 <h6>Drums</h6>
                 I loved playing drums growing up. I started playing drums in the third grade and my 
                 parents got their first set of noise cancelling headphones shortly after. I also got
@@ -31,11 +32,10 @@
                 are Brain Stew by Green Day, Last Resort by Papa Roach, My Hero by the Foo Fighters,
                 Come Together by the Beatles, and Bombtrack by Rage Against the Machine.
             </span>
-            <img class="fun-right-pic" style="background-color: #21E6C1;" src="../assets/Drums.svg"/>
         </div>
         <div class="fun-card-wrapper" style="background-color: #278EA5;">
-            <img class="fun-left-pic" style="background-color: #1F4287" src="../assets/gears.png" alt="gears">
             <span>
+                <img class="fun-left-pic" style="background-color: #1F4287; aspect-ratio: auto;" src="../assets/gears.png" alt="gears"/>
                 <h6>Family of Engineers</h6>
                 Both my parents graduated from college with degrees in Electrical Engineering. Growing 
                 up in a family of engineers has been fun (and a little odd). I have been going to 
@@ -120,24 +120,28 @@ h6 {
 
 .fun-left-pic {
     border-radius: 25%;
-    margin-right: 50px;
     max-height: 160px;
+    max-width: 160px;
+    margin-right: 20px;
     margin-bottom: auto;
     margin-top: auto;
     padding: 10px;
     width: 30%;
     aspect-ratio: 1;
+    float: left;
 }
 
 .fun-right-pic {
     border-radius: 25%;
-    margin-left: 50px;
+    margin-left: 20px;
     max-height: 160px;
+    max-width: 160px;
     margin-bottom: auto;
     margin-top: auto;
     padding: 10px;
     width: 30%;
     aspect-ratio: 1;
+    float: right;
 }
 
 .cb-eye-img {
@@ -155,5 +159,13 @@ h6 {
     padding-top: 20px;
     padding-bottom: 20px;
     border-radius: 30px;
+}
+
+#colorblind-pic {
+    margin-top: 50px;
+}
+
+.switch {
+    position: absolute;
 }
 </style>

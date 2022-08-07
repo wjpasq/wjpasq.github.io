@@ -32,6 +32,7 @@ import ProjectsPage from './pages/ProjectsPage.vue';
 import ResumePage from './pages/ResumePage.vue';
 import FunFactsPage from './pages/FunFactsPage.vue';
 import HomePage from './pages/HomePage.vue';
+import { faLowVision } from '@fortawesome/free-solid-svg-icons';
 
 
 export default defineComponent({
@@ -91,25 +92,35 @@ export default defineComponent({
                 });
 
             });
-          }
-    
-        
-        );
+
+            if (localStorage.getItem("rootFilter")) {
+                const rootFilter = localStorage.getItem("rootFilter") as string;
+                const root = document.documentElement as HTMLElement;
+                root.style.setProperty("--root-filter-color", rootFilter);
+            }
+
+        });
 
         const currentPage = ref('home');
+        if (localStorage.getItem("currentPage")) {
+            currentPage.value = localStorage.getItem("currentPage") as string;
+        }
 
         const menuItemClicked = function(menuItem: string) {
+            console.log(currentPage);
             currentPage.value = menuItem;
+            localStorage.setItem("currentPage", currentPage.value);
         }
 
         const toggleFilter = function(switchValue: boolean) {
             const root = document.documentElement as HTMLElement;
-            // const rootStyle = getComputedStyle(root);
-            // if (rootStyle.getPropertyValue("--root-filter-color") === "none") {
+
             if (switchValue) {
                 root.style.setProperty("--root-filter-color", "url('#colorblind-filter')");
+                localStorage.setItem("rootFilter", "url('#colorblind-filter')");
             } else {
                 root.style.setProperty("--root-filter-color", "none");
+                localStorage.setItem("rootFilter", "none");
             }
         }
 

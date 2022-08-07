@@ -11,6 +11,13 @@
                 back-end experience at Texas A&M and multiple internships have given me
                 the knowledge and skills to make an impact in software development at your
                 company.
+                <br>
+                <span>
+                    <a href="mailto: wjpasq@gmail.com"><img class="contact-icon" 
+                        src="../assets/mail.png" alt="mail"></a>
+                    <a href="https://www.linkedin.com/in/will-pasquarette"><img class="contact-icon" 
+                        src="../assets/linked-in.png" alt="linked-in"></a>
+                </span>
             </span>
         </div>
     </div>
@@ -39,6 +46,8 @@ export default defineComponent({
     background-color: #1F4287;
     border: 10px solid #278EA5;
     border-radius: 10px;
+    position: relative;
+    top: 75px;
 }
 
 .el-pitch-profile-pic {
@@ -57,5 +66,12 @@ export default defineComponent({
 .hello-span {
     font-family: Pacifico;
     font-size: 32px;
+}
+
+.contact-icon {
+    width: 1rem;
+    height: 1rem;
+    filter: invert(100%);
+    margin: 5px;
 }
 </style>

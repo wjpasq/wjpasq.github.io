@@ -1,12 +1,12 @@
 <template>
     <label class="colorblind-switch">
-        <input class="colorblind-checkbox" type="colorblind" @click="inputClicked">
+        <input class="colorblind-checkbox" type="checkbox" @click="inputClicked">
         <span class="slider round"></span>
     </label>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, watch } from "@vue/composition-api";
+import { defineComponent, ref, computed, onMounted } from "@vue/composition-api";
 
 export default defineComponent({
     setup(props, { emit }) {
@@ -35,11 +35,17 @@ export default defineComponent({
 
         onMounted(() => {
             const switches = document.getElementsByClassName('colorblind-checkbox');
-            const navSwitch = switches.item(0);
+            const rootFilter = getComputedStyle(document.documentElement).getPropertyValue("--root-filter-color");
 
-            if (navSwitch?.classList.contains('is-active')) {
-                switches.item(switches.length - 1)?.classList.toggle("is-active");
-                isActive.value = true;
+            if ((rootFilter !== " none" && rootFilter !== "none") || 
+                (localStorage.getItem("rootFilter") === "url('#colorblind-filter')")) {
+                //loop through all switches
+                for (let i = 0; i < switches.length; i++) {
+                    var item = switches.item(i);
+                    if (item?.classList.toString().indexOf("is-active") === -1) {
+                        item.classList.add("is-active");
+                    }
+                }
             }
         });
 

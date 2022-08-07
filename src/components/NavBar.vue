@@ -7,8 +7,19 @@
             aria-expanded="false" @click="toggleVerticalMenu" aria-label="Toggle navigation">
                 <font-awesome-icon icon="fa-solid fa-bars" />
             </button>
-            <div :class="navbarContainerClasses" id="navbarResponsive">
-                <ul :class="navbarClasses">
+            <Transition>
+                <div v-if="togglerActive" :class="verticalNavClasses" id="navbarResponsive">
+                    <ul class="navbar-nav vertical">
+                        <li :class="itemClasses('About Me')" @click="menuItemClicked('About Me')"><a class="nav-link rounded">About Me</a></li>
+                        <li :class="itemClasses('Projects')" @click="menuItemClicked('Projects')"><a class="nav-link rounded">Projects</a></li>
+                        <li :class="itemClasses('Resume')" @click="menuItemClicked('Resume')"><a class="nav-link rounded">Resume</a></li>
+                        <li :class="itemClasses('Fun Facts')" @click="menuItemClicked('Fun Facts')"><a class="nav-link rounded">Fun Facts</a></li>
+                        <li class="nav-item"><ColorblindSwitch @switchClicked="(switchValue) => $emit('toggleFilter', switchValue)"></ColorblindSwitch></li>
+                    </ul>
+                </div>
+            </Transition>
+            <div v-if="!menuButton" :class="horizontalNavClasses" id="navbarResponsive">
+                <ul class="navbar-nav">
                     <li :class="itemClasses('About Me')" @click="menuItemClicked('About Me')"><a class="nav-link rounded">About Me</a></li>
                     <li :class="itemClasses('Projects')" @click="menuItemClicked('Projects')"><a class="nav-link rounded">Projects</a></li>
                     <li :class="itemClasses('Resume')" @click="menuItemClicked('Resume')"><a class="nav-link rounded">Resume</a></li>
@@ -22,26 +33,24 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted, onUnmounted } from "@vue/composition-api";
-import Vue from "vue";
 import ColorblindSwitch from "./ColorblindSwitch.vue";
 
 
 export default defineComponent({
     setup(props, { emit }) {
         const selectedItem = ref("");
+
+        if (localStorage.getItem("selectedItem")) {
+            selectedItem.value = localStorage.getItem("selectedItem") as string;
+        }
+
         const showVerticalNav = ref(false);
         const togglerActive = ref(false);
         const menuButton = ref(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) < 575);
         const containerClasses = computed(() => {
             return {
                 "container": true,
-                "vertical": showVerticalNav.value,
-            };
-        });
-        const navbarClasses = computed(() => {
-            return {
-                "navbar-nav": true,
-                "vertical": showVerticalNav.value,
+                "vertical": menuButton.value,
             };
         });
         const itemClasses = computed(() => {
@@ -54,11 +63,12 @@ export default defineComponent({
         });
         const menuItemClicked = function (menuItem: string) {
             selectedItem.value = menuItem;
+            localStorage.setItem("selectedItem", selectedItem.value);
             emit("menuItemClicked", menuItem);
         };
         const windowResized = function () {
             const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-            menuButton.value = vw < 575;
+            menuButton.value = vw < 668;
             if (showVerticalNav.value && !menuButton.value) {
                 showVerticalNav.value = false;
             }
@@ -78,41 +88,56 @@ export default defineComponent({
         onUnmounted(() => {
             window.removeEventListener("resize", windowResized);
         });
-        const navbarContainerClasses = computed(() => {
+
+        const horizontalNavClasses = computed(() => {
             return {
                 "horizontal-nav": !menuButton.value,
-                "vertical-nav": menuButton.value,
-                "show": (!menuButton.value || showVerticalNav.value),
+                "show": !menuButton.value,
             };
         });
+
+        const verticalNavClasses = computed(() => {
+            return {
+                "vertical-nav": menuButton.value,
+                "show": showVerticalNav.value,
+            }
+        });
+
         const togglerActiveListener = function (event: Event) {
             const target = event.target as HTMLElement;
             const container = document.getElementById("mainNav");
+
             if (target.id !== "mainNav" && !container?.contains(target)) {
                 showVerticalNav.value = false;
-                togglerActive.value = false;
+                togglerActive.value = false;    
                 window.removeEventListener("click", togglerActiveListener);
+                window.removeEventListener("touchstart", togglerActiveListener);
             }
         };
-        const toggleVerticalMenu = function () {
-            showVerticalNav.value = (document.activeElement?.id === "navButton");
-            togglerActive.value = true;
-            window.addEventListener("click", togglerActiveListener);
-        };
-        const focusOut = function () {
-            console.log("Focus Out");
+        const toggleVerticalMenu = function (event: Event) {
+            const target = event.target as HTMLElement;
+            console.log("Toggle vertical");
+            if (showVerticalNav.value) {
+                showVerticalNav.value = false;
+                togglerActive.value = false;
+            } else {
+                showVerticalNav.value = (document.activeElement?.id === "navButton");
+                togglerActive.value = true;
+                window.addEventListener("click", togglerActiveListener);
+                window.addEventListener("touchstart", togglerActiveListener);
+            }
         };
         return {
             containerClasses,
             menuButton,
             menuItemClicked,
-            navbarContainerClasses,
             showVerticalNav,
             toggleVerticalMenu,
-            navbarClasses,
+            togglerActive,
             itemClasses,
-            focusOut,
             navbarTogglerClasses,
+            horizontalNavClasses,
+            verticalNavClasses,
         };
     },
     components: { ColorblindSwitch }
@@ -241,13 +266,24 @@ export default defineComponent({
 
 .vertical-nav {
     text-align: left;
-    max-height: 0;
-    opacity: 0;
 }
 
-.vertical-nav.show {
+/* Transition */
+.v-enter,
+.v-leave-to {
+    /* max-height: 0; */
+    max-height: 0 !important;
+    opacity: 0 !important;
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: max-height 1s ease-in-out, opacity 0s ease-in-out .5s;
+}
+
+.v-leave,
+.v-enter-to {
     max-height: 500px;
     opacity: 1;
-    transition: max-height 1s ease-in-out, opacity 0s ease-in-out .5s;
 }
 </style>
