@@ -29,7 +29,7 @@
                 <h6>Black Jack</h6>
                 Black Jack was the my first attempt at a NetBeans project. I wanted to make somehing
                 that I could enjoy playing as well us something that could let me grow as a programmer.
-                I made a black jacke game that allows the player to bet, split, double down, and even
+                I made a black jack game that allows the player to bet, split, double down, and even
                 tells the player the real-time chance they have of winning the hand.
                 <br>
                 <a href="https://github.com/wjpasq/BlackJack"><img class="filter-white" src="../assets/github.png" alt="github-logo"></a>

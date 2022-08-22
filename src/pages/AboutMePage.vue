@@ -18,7 +18,7 @@
                 I worked as a software engineering intern at 
                 <a class="about-link" href="https://www.artificial.com/"> Artificial Inc. </a>
                  during the summer of
-                2021 and the summer of 2022. At Artificial, I got to work on porjects using vue.js
+                2021 and the summer of 2022. At Artificial, I got to work on projects using vue.js
                 and typescript. I added features to the artificial lab suite that were requested by
                 clients. I also created an internal UI tool for use by other Artificial developers.
             </span>
