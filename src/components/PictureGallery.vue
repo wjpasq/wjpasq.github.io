@@ -1,6 +1,6 @@
 <template>
     <div class="gallery-container">
-        <div class="slides">
+        <div id="gallery" :class="slideClasses" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove" @mouseleave="mouseLeave">
             <div v-for="img in images" :key="img">
                 <img class="slide-img" :src="img">
             </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from "@vue/composition-api";
+import { defineComponent, ref, computed } from "@vue/composition-api";
 
 interface Props {
     images: Array<string>,
@@ -20,23 +20,50 @@ export default defineComponent({
         images: Array,
     },
     setup(props: Props) {
-        const activeIndex = ref(0);
+        let startX = 0;
+        let scrollLeft = 0;
+        const isDown = ref(false);
         
-        const thumbnailClasses = computed(() => {
-            return (img: string) => {
-                return {
-                    'highlighted': props.images.indexOf(img) === activeIndex.value,
+        const mouseDown = function(event: MouseEvent) {
+            isDown.value = true;
+            const gallery = document.getElementById("gallery") as HTMLElement;
+            startX = event.pageX - gallery.offsetLeft;
+            scrollLeft = gallery.scrollLeft;
+        }
+
+        const mouseUp = function(event: MouseEvent) {
+            isDown.value = false;
+        }
+
+        const mouseMove = function(event: MouseEvent) {
+            if (isDown.value) {
+                if (!(event.x == 0 && event.y == 0)) {
+                    const gallery = document.getElementById("gallery") as HTMLElement;
+                    event.preventDefault();
+                    const x = event.pageX - gallery.offsetLeft;
+                    const walk = 2 * (x - startX);
+                    gallery.scrollLeft = scrollLeft - walk;
                 }
+            }
+        }
+
+        const mouseLeave = function (event: MouseEvent) {
+            isDown.value = false;
+        }
+
+        const slideClasses = computed(() => {
+            return {
+                'slides': true,
+                'active': isDown.value,
             }
         });
 
-        const thumbnailClicked = function (img: string) {
-            console.log(props.images.indexOf(img));
-        };
-
         return {
-            thumbnailClicked,
-            thumbnailClasses,
+            mouseMove,
+            mouseDown,
+            mouseUp,
+            slideClasses,
+            mouseLeave,
         }
     },
 });
@@ -57,10 +84,10 @@ export default defineComponent({
   padding: 0 0.25rem;
   overflow-y: auto;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   overflow-y: hidden;
   overflow-x: scroll;
+  cursor: grab;
 }
 
 .slides > div {
@@ -76,5 +103,9 @@ export default defineComponent({
 
 .slides::-webkit-scrollbar {
   display: none;
+}
+
+.active {
+    cursor: grabbing;
 }
 </style>

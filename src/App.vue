@@ -160,7 +160,7 @@ body {
 #page {
     display: flex;
     flex-flow: column;
-    height: 100%;
+    height: 100vh;
 }
 
 :root {
